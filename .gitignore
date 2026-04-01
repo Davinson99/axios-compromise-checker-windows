@@ -1,0 +1,12 @@
+# PowerShell
+*.ps1xml
+
+# Node
+node_modules/
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+Desktop.ini
