@@ -1,11 +1,11 @@
-# axios-compromise-checker
+# axios-compromise-checker-windows
 
 Windows PowerShell scanner for checking common indicators related to the axios supply chain compromise affecting `axios@1.14.1` and `axios@0.30.4`.
 
 ## What it checks
 
 1. Installed axios versions via `npm list axios`
-2. Current-directory lockfiles for affected versions
+2. Lockfiles in a selected target directory for affected versions
 3. Git history of lockfiles for `plain-crypto-js`
 4. Presence of `node_modules\plain-crypto-js`
 5. Common project files for suspicious references:
@@ -21,26 +21,39 @@ The original detection script being shared online was written for macOS/Linux an
 
 ## Usage
 
-Run from the root of the project you want to inspect:
+### Scan the current directory
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\check-axios-compromise.ps1
 ```
 
-Or if the script is elsewhere:
+### Scan a specific project path
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File C:\path\to\check-axios-compromise.ps1
+powershell -ExecutionPolicy Bypass -File .\check-axios-compromise.ps1 -TargetPath "C:\path\to\project"
 ```
+
+### Run the script from somewhere else against a project
+
+```powershell
+powershell -ExecutionPolicy Bypass -File C:\path\to\check-axios-compromise.ps1 -TargetPath "C:\path\to\project"
+```
+
+## Parameters
+
+- `-TargetPath`
+  - Optional
+  - Defaults to the current working directory
+  - Lets other people scan any local Node.js repo without moving the script into that repo
 
 ## Recommended usage pattern
 
-Copy or clone this repo, then run the script inside the Node.js project you actually want to inspect. The script checks the current working directory for lockfiles, `node_modules`, and git history.
+Clone this repo anywhere on a Windows machine, then point `-TargetPath` at the Node.js project you actually want to inspect.
 
 ## Limitations
 
 - This is a detection helper, not a forensic guarantee.
-- It is strongest when run from inside a specific repository.
+- It is strongest when run against a specific repository with lockfiles and `node_modules` present.
 - It does not prove a machine is safe if prior compromise artifacts were removed.
 - Windows-specific artifact checks are heuristic because the public reports focused more heavily on Linux/macOS payload paths.
 
